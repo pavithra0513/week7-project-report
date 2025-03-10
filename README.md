@@ -81,6 +81,77 @@ To extract important resume elements, various NER models are considered:
   - Hyperparameter tuning
   - Data augmentation
   - Active learning
+# Analysis
+# Model Performance Summary
 
-## Conclusion
-Automating resume parsing using NER significantly enhances recruitment efficiency by extracting structured data from unstructured text. With deep learning models like `BERT` and `BiLSTM-CRF`, high accuracy can be achieved. Integration with ATS and continuous retraining further improves performance, making AI-driven hiring a reality.
+We compare the CRF-based model and the spaCy deep learning NER model based on classification performance on the test dataset.
+
+| Metric                | CRF Model | spaCy NER Model |
+|-----------------------|-----------|----------------|
+| **Overall Accuracy**  | 90%       | 93%            |
+| **Weighted F1 Score** | 0.8957    | 0.91           |
+| **Best Performing Entities** | Name, Email, Degree | Name, Email, Location |
+| **Worst Performing Entities** | Years of Experience, Graduation Year, Skills | Years of Experience, Graduation Year, Skills |
+
+Both models achieved high accuracy, but entity-specific performance varies significantly. The spaCy model has a slightly higher accuracy, while the CRF model performs better on structured entities like Name and Degree.
+
+## Key Observations from Model Evaluations
+
+### A. CRF Model Analysis
+
+#### Strengths:
+- Achieved high precision for non-entity words (F1-score of 0.95), indicating that the model effectively differentiates between entity and non-entity tokens.
+- Performed well on structured entities such as **Name (F1-score: 0.75), Email Address (0.63), and Degree (0.73).**
+- Higher recall for **College Name and Degree** compared to spaCy's NER model.
+
+#### Weaknesses:
+- Low recall for **Graduation Year (0.12) and Years of Experience (0.00),** suggesting the model struggles with numerical entity extraction.
+- **Companies Worked At and Designation** categories have low recall (~0.35), meaning the model misses many valid cases.
+- **Skills entity detection (F1-score: 0.50)** is suboptimal, likely due to the broad and diverse nature of skill-related terms.
+
+### B. spaCy NER Model Analysis
+
+#### Strengths:
+- Higher recall on **Location and Designation** entities compared to the CRF model.
+- Overall higher accuracy **(93%)** and better contextual entity recognition.
+- Captures **Name, Email, and Location** entities with high accuracy, making it suitable for general entity extraction.
+
+#### Weaknesses:
+- Extremely low recall for **Skills (F1-score: 0.19)** → Many skill-related terms are being missed.
+- **Graduation Year and Years of Experience show F1 scores of 0.00,** indicating the model completely fails to recognize these entities.
+- Fluctuations in training loss (as seen in the loss curve) indicate instability in early training iterations.
+
+## Training Loss Reduction (Deep Learning Model)
+The training loss curve for the spaCy NER model shows:
+- An initial steep drop in loss (~85% reduction after the first iteration), indicating rapid learning in early stages.
+- Fluctuations in loss values between **iterations 2-5,** suggesting instability or underfitting.
+- Loss stabilizes after **iteration 6,** meaning the model starts to converge.
+- ![image](https://github.com/user-attachments/assets/6d09feb4-ad3a-4488-8f8f-2166993d1a5e)
+
+
+## Entity-Level Performance Comparison
+
+| Entity Type            | CRF Model F1-score | spaCy NER Model F1-score |
+|------------------------|--------------------|--------------------------|
+| **College Name**       | 0.63               | 0.54                     |
+| **Companies Worked At**| 0.48               | 0.36                     |
+| **Degree**            | 0.73               | 0.62                     |
+| **Designation**       | 0.41               | 0.41                     |
+| **Email Address**     | 0.63               | 0.67                     |
+| **Graduation Year**   | 0.18               | 0.00                     |
+| **Location**         | 0.38               | 0.44                     |
+| **Name**             | 0.75               | 0.94                     |
+| **Skills**           | 0.50               | 0.32                     |
+| **Years of Experience** | 0.00             | 0.00                     |
+
+## Findings:
+- **CRF** performs better on **Degree, College Name, and Skills.**
+- **spaCy model** is significantly better at detecting **Names, Emails, and Locations.**
+- **Both models struggle with numerical entities** (Graduation Year, Years of Experience).
+
+## References
+
+- Dash, A., Darshana, S., Yadav, D. K., & Gupta, V. (2024). A clinical named entity recognition model using pretrained word embedding and deep neural networks. *Decision Analytics Journal, 10*, 100426.
+- Li, M., Zhou, H., Yang, H., & Zhang, R. (2024). RT: a Retrieving and Chain-of-Thought framework for few-shot medical named entity recognition. *Journal of the American Medical Informatics Association, 31(9)*, 1929-1938.
+- Tikayat Ray, A., Pinon Fischer, O. J., White, R. T., Cole, B. F., & Mavris, D. N. (2024). Development of a language model for named-entity-recognition in aerospace requirements. *Journal of Aerospace Information Systems, 21(6)*, 489-499.
+- Zhang, Y., & Xiao, G. (2024). Named entity recognition datasets: a classification framework. *International Journal of Computational Intelligence Systems, 17(1)*, 71.
