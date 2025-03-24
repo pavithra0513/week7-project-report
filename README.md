@@ -84,7 +84,7 @@ To extract important resume elements, various NER models are considered:
 # Analysis
 # Model Performance Summary
 
-We compare the CRF-based model and the spaCy deep learning NER model based on classification performance on the test dataset.
+Based on classification performance on the test dataset, we contrast the spaCy deep learning NER model with the CRF-based model.
 
 | Metric                | CRF Model | spaCy NER Model |
 |-----------------------|-----------|----------------|
@@ -93,14 +93,14 @@ We compare the CRF-based model and the spaCy deep learning NER model based on cl
 | **Best Performing Entities** | Name, Email, Degree | Name, Email, Location |
 | **Worst Performing Entities** | Years of Experience, Graduation Year, Skills | Years of Experience, Graduation Year, Skills |
 
-Both models achieved high accuracy, but entity-specific performance varies significantly. The spaCy model has a slightly higher accuracy, while the CRF model performs better on structured entities like Name and Degree.
+Although the accuracy of both models was good, there are notable differences in entity-specific performance.  On structured items such as Name and Degree, the CRF model performs better than the spaCy model, which has a little higher accuracy.
 
 ## Key Observations from Model Evaluations
 
 ### A. CRF Model Analysis
 
 #### Strengths:
-- Achieved high precision for non-entity words (F1-score of 0.95), indicating that the model effectively differentiates between entity and non-entity tokens.
+- High precision for non-entity terms was attained (F1-score of 0.95), suggesting that the model distinguishes entity tokens from non-entity tokens with effectiveness.
 - Performed well on structured entities such as **Name (F1-score: 0.75), Email Address (0.63), and Degree (0.73).**
 - Higher recall for **College Name and Degree** compared to spaCy's NER model.
 
